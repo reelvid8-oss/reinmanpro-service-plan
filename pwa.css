@@ -1,0 +1,20 @@
+/* Home Screen safe areas and occasional app notifications. */
+.app-header { padding-top: env(safe-area-inset-top); }
+.client-topbar { padding-top: calc(10px + env(safe-area-inset-top)); }
+.loading-overlay { padding-top: calc(20px + env(safe-area-inset-top)); padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+.pwa-notice {
+  position: fixed; z-index: 110; left: 16px;
+  bottom: calc(92px + env(safe-area-inset-bottom));
+  width: min(370px, calc(100% - 32px)); padding: 18px;
+  border: 1px solid #aed8e9; border-radius: 18px;
+  background: #f6fcff; color: #062844;
+  box-shadow: 0 12px 40px #0628442e;
+  font: 400 14px/1.5 system-ui, sans-serif;
+}
+.pwa-notice[hidden] { display: none; }
+.pwa-notice p { margin: 0 0 12px; }
+.pwa-notice button { min-height: 44px; padding: 10px 14px; border-radius: 10px; border: 1px solid #b6d6e5; font: inherit; font-weight: 600; cursor: pointer; }
+.pwa-notice .pwa-update { background: #126da0; color: white; border-color: #126da0; margin-right: 8px; }
+.pwa-notice .pwa-dismiss { background: white; color: #174566; }
+.pwa-notice button:focus-visible { outline: 3px solid #24a3dc; outline-offset: 3px; }
+@media print { .pwa-notice { display: none !important; } }

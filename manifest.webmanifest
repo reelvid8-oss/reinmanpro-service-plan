@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "ReinmanPro Service Plan",
+  "short_name": "ReinmanPro",
+  "description": "Prepare property care service plans and client proposals.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#062844",
+  "theme_color": "#0b3d66",
+  "lang": "en",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
