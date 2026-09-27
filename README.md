@@ -4,7 +4,7 @@ This package is ready to upload to a public GitHub repository. It includes the l
 
 ## Publish for the first time
 
-1. Extract `reinmanpro-github-pages.zip` on your computer.
+1. Extract `reinmanpro-service-plan-github-pages.zip` on your computer.
 2. Sign in at https://github.com and create a **Public** repository named `reinmanpro-service-plan`. Choose GitHub Free; no paid trial or add-ons are needed for this setup.
 3. On the repository's Code tab, choose **Add file → Upload files**. In an empty repository, use the **uploading an existing file** link.
 4. Upload the **contents** of the extracted folder, including the `icons` folder. Do not upload only the ZIP and do not put another folder around the files. `index.html`, `sw.js`, `pwa.js`, `pwa.css`, and `manifest.webmanifest` must be at the repository's top level. Include `.nojekyll` if your file picker shows it; this plain HTML package also works without it.
@@ -27,11 +27,17 @@ If iOS clears website data, the app is removed/reinstalled, or an initial downlo
 
 ## Save a client PDF
 
-Create the plan, open Client View, then tap **Save as PDF**. The app opens the system print sheet. On iPhone/iPad, expand the print preview with a two-finger pinch-out if needed, then use **Share → Save to Files**. The exact controls can vary by iOS version. Review the saved PDF once on your devices; its print layout excludes the calculator controls and internal cost breakdown.
+Create the plan, open the **Final Plan**, then tap **Save as PDF**. The app opens the system print sheet. On iPhone/iPad, expand the print preview with a two-finger pinch-out if needed, then use **Share → Save to Files**. The exact controls can vary by iOS version. Review the saved PDF once on your devices; its print layout excludes the calculator controls and internal cost breakdown.
 
 ## Update the app later
 
-Upload the complete replacement package to the same repository and branch, preserving the folder structure. Always update `sw.js` alongside the changed app files. The build identifier in that file must change for a new version to be detected.
+1. Extract the newest `reinmanpro-service-plan-github-pages.zip`.
+2. Open the existing GitHub repository and choose **Add file → Upload files**.
+3. Upload all extracted files and the `icons` folder to the repository root. Allow GitHub to replace files with matching names.
+4. Commit the changes to the `main` branch, then wait for the Pages deployment to finish.
+5. Reopen the installed app while connected to the internet. When **An app update is ready** appears, tap **Update app** between meetings.
+
+Always update `sw.js` alongside the changed app files. Its build identifier must change for installed devices to detect the new version; the package supplied here already includes that change.
 
 When an installed app is online, it checks for new versions. Once a new version has downloaded, the calculator offers **Update app** and **Later**. Tap Update app between meetings; it reloads the app and keeps the locally saved plan when browser storage is available. A waiting update can also activate automatically after all old app windows/tabs have closed. Offline devices keep using their downloaded version until they reconnect.
 
