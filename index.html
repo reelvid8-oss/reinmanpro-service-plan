@@ -676,6 +676,111 @@
     @media(max-width:560px){.service-grid{grid-template-columns:1fr}.service-card-toggle{min-height:60px;padding:12px}.service-inline-details{padding:1px 12px 13px 48px}.service-inline-details .config-fields{grid-template-columns:1fr}.filter-total{max-width:none}.filter-pair{grid-template-columns:minmax(0,1fr) 112px}.filter-pair .unit-addon{display:none}.filter-pair .unit-input{grid-template-columns:1fr}.filter-pair .unit-input input{border-radius:11px}.in-demand{font-size:.58rem;padding:3px 6px}.config-body{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.investment-card{padding:19px}.schedule-heading{padding:17px}.discount-dialog{width:calc(100% - 16px)}.proposal-meta{grid-template-columns:1fr}.proposal-meta #clientMetaName,.proposal-meta #clientMetaAddress,.proposal-meta #clientMetaDate{grid-column:1;justify-self:start}.proposal-meta #clientMetaName{grid-row:1}.proposal-meta #clientMetaAddress{grid-row:2}.proposal-meta #clientMetaDate{grid-row:3;margin-top:3px}}
     @media print { .plan-options,.discount-dialog { display:none!important; } }
   </style>
+
+  <style id="three-step-refresh">
+    .step-track { grid-template-columns: repeat(3, 1fr); }
+    .step-track::before { left: 16.66%; right: 16.66%; }
+    .step-progress { left: 16.66%; }
+    .service-grid { align-items:start; }
+    .service-card { display:block; min-height:0; padding:0; overflow:hidden; cursor:default; isolation:isolate; background:linear-gradient(145deg,#fff 0%,#f7fbfe 56%,#eaf7fc 100%); }
+    .service-card::before { content:""; position:absolute; z-index:-1; width:145px; height:145px; right:-72px; top:-92px; border-radius:50%; background:radial-gradient(circle,#52cbf33d 0%,#52cbf312 48%,transparent 72%); transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .35s; }
+    .service-card::after { content:""; position:absolute; z-index:-1; inset:0; background:linear-gradient(112deg,transparent 16%,#ffffffa8 39%,transparent 58%); transform:translateX(-125%); pointer-events:none; }
+    .service-card:hover::before,.service-card.selected::before { transform:scale(1.24) translate(-10px,10px); }
+    .service-card:hover::after { animation:serviceShine 1.05s ease; }
+    @keyframes serviceShine { to{transform:translateX(125%)} }
+    .service-card.selected { background:linear-gradient(145deg,#fff 0%,#f0fbff 52%,#dff4fc 100%); }
+    .service-card-toggle { position:relative; z-index:1; width:100%; min-height:64px; display:flex; align-items:center; gap:12px; padding:13px 14px; border:0; color:inherit; background:transparent; text-align:left; cursor:pointer; }
+    .service-card-toggle:focus-visible { outline:3px solid #65bfe5; outline-offset:-3px; border-radius:13px; }
+    .service-title-row { min-width:0; flex:1; display:flex; align-items:center; justify-content:space-between; gap:9px; }
+    .service-title-row strong { margin:0; color:var(--navy-950); font-size:.95rem; line-height:1.15; letter-spacing:-.012em; }
+    .in-demand { flex:0 0 auto; display:inline-flex; align-items:center; gap:4px; padding:4px 7px; border:1px solid #ffc18d; border-radius:999px; color:#a63b05; background:linear-gradient(135deg,#fff4cf,#ffe0bb); box-shadow:0 4px 12px #ff7a1823,inset 0 0 10px #fff9; font-size:.62rem; font-weight:950; letter-spacing:.035em; }
+    .in-demand .flame { display:inline-block; filter:drop-shadow(0 0 4px #ff6a00aa); animation:flamePulse 1.35s ease-in-out infinite; }
+    @keyframes flamePulse { 50%{transform:translateY(-1px) scale(1.12);filter:drop-shadow(0 0 7px #ff4d00)} }
+    .service-inline-details { position:relative; z-index:2; padding:2px 14px 15px 51px; border-top:1px solid #cfe7f2; background:linear-gradient(180deg,#ffffff82,#f4fbfecc); animation:serviceExpand .38s cubic-bezier(.16,1,.3,1) both; }
+    @keyframes serviceExpand { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
+    .service-inline-details .config-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding-top:12px; }
+    .service-inline-details .field label { margin-bottom:6px; font-size:.76rem; }
+    .service-inline-details input,.service-inline-details select { min-height:43px; padding-top:10px; padding-bottom:10px; }
+    .service-inline-details .unit-addon { min-width:68px; }
+    .service-inline-details .filter-fields { grid-template-columns:1fr; }
+    .filter-total { max-width:calc(50% - 5px); }
+    .filter-pair { grid-column:1/-1; display:grid; grid-template-columns:minmax(0,1.35fr) minmax(118px,.65fr); gap:10px; }
+    .filter-pair .field { min-width:0; }
+    .service-inline-details .quarter-picker { margin-top:10px; padding:10px; border-radius:12px; background:#eaf6fb; }
+    .service-inline-details .quarter-pill { min-height:39px; padding:6px; }
+    .config-body { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .config-fields { grid-column:1/-1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .auto-total { padding:13px 14px; border:1px solid #c8e2ef; border-radius:12px; background:#f1faff; color:var(--navy-900); }
+    .auto-total strong { display:block; font-size:1.15rem; }
+    .quarter-picker { padding-top:8px; }
+    .quarter-pill.on { color:#1f6a2b; border-color:#85c68b; background:var(--green-100); }
+    .investment-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .investment-card { position:relative; min-height:164px; padding:22px; overflow:hidden; border:1px solid #d7e5ec; border-radius:20px; background:linear-gradient(145deg,#fff,#f7fbfd); box-shadow:0 10px 28px rgba(8,49,80,.07); }
+    .investment-card.featured { color:#fff; border-color:transparent; background:linear-gradient(145deg,#0b3d66,#147ba9); box-shadow:0 16px 36px rgba(11,61,102,.23); }
+    .investment-card.featured::after { content:""; position:absolute; width:140px; height:140px; right:-54px; top:-70px; border:24px solid rgba(255,255,255,.09); border-radius:50%; }
+    .investment-card span { display:block; color:var(--muted); font-size:.82rem; font-weight:850; text-transform:uppercase; letter-spacing:.045em; }
+    .investment-card strong { display:block; margin:12px 0 7px; color:var(--navy-950); font-size:clamp(1.75rem,4vw,2.45rem); line-height:1; }
+    .investment-card small { color:#728391; }
+    .investment-card.featured span,.investment-card.featured strong { color:#fff; }
+    .investment-card.featured small { color:#d7f2ff; }
+    .investment-card.monthly { color:#fff; border-color:transparent; background:linear-gradient(145deg,#176f3b,#35a853); box-shadow:0 16px 36px rgba(23,111,59,.22); }
+    .investment-card.monthly::after { content:""; position:absolute; width:150px; height:150px; right:-64px; top:-76px; border:24px solid rgba(255,255,255,.10); border-radius:50%; }
+    .investment-card.monthly span,.investment-card.monthly strong { color:#fff; }
+    .investment-card.monthly small { color:#ddf7e5; }
+    .investment-card.package { border-color:#e6b83e; background:linear-gradient(145deg,#ffd96a,#e9a91a); box-shadow:0 16px 36px rgba(193,133,9,.22); }
+    .investment-card.package::after { content:""; position:absolute; width:150px; height:150px; right:-64px; top:-76px; border:24px solid rgba(255,255,255,.18); border-radius:50%; }
+    .investment-card.package span,.investment-card.package strong { color:#17324a; }
+    .investment-card.package small { color:#604715; }
+    .proposal-meta { display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:28px; row-gap:5px; align-items:start; }
+    #clientMetaName { grid-column:1; grid-row:1; font-weight:750; }
+    #clientMetaAddress { grid-column:1; grid-row:2; color:#cfefff; }
+    #clientMetaDate { grid-column:2; grid-row:1 / span 2; justify-self:end; }
+    .schedule-card { margin-top:20px; border:1px solid var(--line); border-radius:20px; background:#fff; box-shadow:0 10px 28px rgba(8,49,80,.06); overflow:hidden; }
+    .schedule-heading { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:20px; border-bottom:1px solid var(--line); background:linear-gradient(135deg,#fff,#f1f9fd); }
+    .schedule-heading h3 { margin:0; color:var(--navy-950); font-size:1.12rem; }
+    .schedule-heading .eyebrow { margin-bottom:3px; }
+    .plan-options { position:relative; display:inline-grid; place-items:center; flex:0 0 42px; width:42px; height:42px; padding:0; overflow:hidden; touch-action:none; -webkit-touch-callout:none; user-select:none; border:1px solid #d3e1e8; border-radius:12px; color:#647784; background:#f8fbfc; cursor:pointer; opacity:.68; }
+    .plan-options:hover,.plan-options:focus-visible { opacity:1; border-color:#9dc8dc; }
+    .plan-options::after { content:""; position:absolute; left:0; right:0; bottom:0; height:3px; background:linear-gradient(90deg,#22a9dc,#75d9ee); transform:scaleX(0); transform-origin:left; pointer-events:none; }
+    .plan-options.holding { opacity:1; border-color:#4db3d8; box-shadow:0 0 0 3px rgba(35,160,207,.12); }
+    .plan-options.holding::after { animation:holdProgress 3s linear forwards; }
+    .plan-options svg { position:relative; z-index:1; width:18px; height:18px; }
+    @keyframes holdProgress { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+    .schedule-scroll { width:100%; overflow-x:hidden; }
+    .schedule-table { width:100%; min-width:0; table-layout:fixed; border-collapse:separate; border-spacing:0; }
+    .schedule-table th { width:13%; padding:12px 4px; color:#fff; background:var(--navy-900); text-align:center; font-size:.79rem; }
+    .schedule-table th:first-child { width:48%; padding-left:13px; padding-right:8px; text-align:left; }
+    .schedule-table td { width:13%; padding:12px 4px; border-bottom:1px solid #e7eef2; text-align:center; }
+    .schedule-table td:first-child { width:48%; padding-left:13px; padding-right:8px; overflow-wrap:anywhere; color:var(--navy-950); text-align:left; font-weight:800; }
+    .schedule-table tr:last-child td { border-bottom:0; }
+    .schedule-check { width:24px; height:24px; margin:auto; display:grid; place-items:center; border-radius:8px; color:#fff; background:var(--green-600); box-shadow:0 5px 12px rgba(66,168,70,.2); font-size:.84rem; font-weight:900; }
+    .schedule-empty { color:#a9b7c0; font-weight:700; }
+    .discount-dialog { width:min(700px,calc(100% - 24px)); max-height:calc(100vh - 24px); padding:0; border:0; border-radius:22px; color:var(--ink); background:#fff; box-shadow:0 28px 90px rgba(4,30,51,.38); }
+    .discount-dialog::backdrop { background:rgba(3,25,42,.72); backdrop-filter:blur(7px); }
+    .discount-shell { padding:clamp(20px,4vw,30px); }
+    .discount-head { display:flex; justify-content:space-between; gap:16px; }
+    .discount-head h2 { margin:0; }
+    .discount-head p:not(.eyebrow) { margin:7px 0 0; color:var(--muted); }
+    .dialog-close { flex:0 0 40px; width:40px; height:40px; border:1px solid var(--line); border-radius:50%; color:#627685; background:#f5f9fb; font-size:1.45rem; cursor:pointer; }
+    .discount-input-row { display:grid; grid-template-columns:1fr auto; align-items:end; gap:12px; margin:22px 0; padding:18px; border:1px solid #dce8ee; border-radius:16px; background:#f8fbfd; }
+    .discount-results { animation:panelIn .3s ease; }
+    .discount-status { padding:12px 14px; border-radius:12px; text-align:center; font-weight:950; letter-spacing:.055em; }
+    .discount-status.approved { color:#246d2a; background:var(--green-100); }
+    .discount-status.manager { color:#805b0c; background:var(--amber-100); }
+    .discount-status.stop { color:#a62f2f; background:var(--red-100); }
+    .comparison-table-wrap { margin-top:14px; overflow-x:auto; }
+    .comparison-table { width:100%; min-width:520px; border-collapse:collapse; }
+    .comparison-table th,.comparison-table td { padding:12px; border-bottom:1px solid #e4edf2; text-align:right; }
+    .comparison-table th:first-child,.comparison-table td:first-child { text-align:left; }
+    .comparison-table th { color:#526a79; background:#f1f7fa; font-size:.78rem; text-transform:uppercase; }
+    .comparison-table td:last-child { color:var(--navy-900); font-weight:900; }
+    .discount-actions { display:flex; justify-content:flex-end; margin-top:18px; }
+    .discount-actions .btn { min-width:240px; }
+    .client-schedule { min-width:0; }
+    @media(max-width:780px){.investment-grid{grid-template-columns:1fr}.investment-card{min-height:132px}.config-fields{grid-template-columns:1fr}.schedule-heading{align-items:flex-start}.discount-input-row{grid-template-columns:1fr}.discount-input-row .btn,.discount-actions .btn{width:100%}}
+    @media(max-width:560px){.service-grid{grid-template-columns:1fr}.service-card-toggle{min-height:60px;padding:12px}.service-inline-details{padding:1px 12px 13px 48px}.service-inline-details .config-fields{grid-template-columns:1fr}.filter-total{max-width:none}.filter-pair{grid-template-columns:minmax(0,1fr) 112px}.filter-pair .unit-addon{display:none}.filter-pair .unit-input{grid-template-columns:1fr}.filter-pair .unit-input input{border-radius:11px}.in-demand{font-size:.58rem;padding:3px 6px}.config-body{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.investment-card{padding:19px}.schedule-heading{padding:17px}.discount-dialog{width:calc(100% - 16px)}.proposal-meta{grid-template-columns:1fr}.proposal-meta #clientMetaName,.proposal-meta #clientMetaAddress,.proposal-meta #clientMetaDate{grid-column:1;justify-self:start}.proposal-meta #clientMetaName{grid-row:1}.proposal-meta #clientMetaAddress{grid-row:2}.proposal-meta #clientMetaDate{grid-row:3;margin-top:3px}}
+    @media print { .plan-options,.discount-dialog { display:none!important; } }
+  </style>
   <link rel="stylesheet" href="./pwa.css" />
 </head>
 <body>
@@ -867,6 +972,32 @@
       <div class="new-plan-actions">
         <button class="btn btn-secondary" value="cancel" autofocus>Keep editing</button>
         <button class="btn btn-primary" value="start">Start new plan</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="discountDialog" class="discount-dialog" aria-labelledby="discountTitle">
+    <form method="dialog">
+      <div class="discount-shell">
+        <div class="discount-head">
+          <div><p class="eyebrow">Sales plan options</p><h2 id="discountTitle">Discount Plan</h2><p>Enter a percentage to test the offer against the protected margin.</p></div>
+          <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+        </div>
+        <div class="discount-input-row">
+          <div class="field"><label for="discountPercent">Offer adjustment</label><div class="percent-input"><input id="discountPercent" type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="0"></div></div>
+          <button id="testDiscount" class="btn btn-primary" type="button">Preview offer</button>
+        </div>
+        <div id="discountResults" class="discount-results" hidden>
+          <div id="discountStatus" class="discount-status">—</div>
+          <div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Pricing</th><th>Original</th><th>With adjustment</th></tr></thead><tbody>
+            <tr><td>Initial payment</td><td id="originalInitial">—</td><td id="discountInitial">—</td></tr>
+            <tr><td>Monthly payment</td><td id="originalMonthly">—</td><td id="discountMonthly">—</td></tr>
+            <tr><td>Maintenance package</td><td id="originalAnnual">—</td><td id="discountAnnual">—</td></tr>
+            <tr><td>Discount amount / month</td><td>—</td><td id="discountAmount">—</td></tr>
+          </tbody></table></div>
+          <div class="discount-actions"><button id="applyDiscount" class="btn btn-success" type="button">Apply Discount</button></div>
+        </div>
       </div>
     </form>
   </dialog>
