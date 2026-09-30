@@ -4,7 +4,7 @@ This package is ready to upload to a public GitHub repository. It includes the l
 
 ## Publish for the first time
 
-1. Extract `reinmanpro-service-plan-github-pages.zip` on your computer.
+1. Extract the supplied ReinmanPro GitHub update ZIP on your computer.
 2. Sign in at https://github.com and create a **Public** repository named `reinmanpro-service-plan`. Choose GitHub Free; no paid trial or add-ons are needed for this setup.
 3. On the repository's Code tab, choose **Add file → Upload files**. In an empty repository, use the **uploading an existing file** link.
 4. Upload the **contents** of the extracted folder, including the `icons` folder. Do not upload only the ZIP and do not put another folder around the files. `index.html`, `sw.js`, `pwa.js`, `pwa.css`, and `manifest.webmanifest` must be at the repository's top level. Include `.nojekyll` if your file picker shows it; this plain HTML package also works without it.
@@ -31,7 +31,7 @@ Create the plan, open the **Final Plan**, then tap **Save as PDF**. The app open
 
 ## Update the app later
 
-1. Extract the newest `reinmanpro-service-plan-github-pages.zip`.
+1. Extract the newest ReinmanPro GitHub update ZIP.
 2. Open the existing GitHub repository and choose **Add file → Upload files**.
 3. Upload all extracted files and the `icons` folder to the repository root. Allow GitHub to replace files with matching names.
 4. Commit the changes to the `main` branch, then wait for the Pages deployment to finish.

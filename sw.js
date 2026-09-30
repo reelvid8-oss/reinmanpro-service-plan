@@ -1,7 +1,7 @@
 'use strict';
-// Change this identifier whenever the app or its offline assets change.
+// The build script changes this identifier whenever the app or its assets change.
 const CACHE_PREFIX = 'reinmanpro-pages:' + self.registration.scope + ':';
-const CACHE_NAME = CACHE_PREFIX + '1221eee3f108e7cd';
+const CACHE_NAME = CACHE_PREFIX + 'd43ff88f9c84a20c';
 const APP_URL = new URL('index.html', self.registration.scope).href;
 const SHELL = ['index.html', 'manifest.webmanifest', 'pwa.js', 'pwa.css',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png']
