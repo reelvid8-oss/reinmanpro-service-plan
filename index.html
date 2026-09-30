@@ -700,6 +700,72 @@
     .comparison-table th:nth-child(2) { color:#fff; background:#516b7d; }
     .comparison-table th:nth-child(3),.comparison-table td:nth-child(3) { width:29%; color:#176b37; background:#e7f7eb; font-weight:900; }
     .comparison-table th:nth-child(3) { color:#fff; background:#238447; }
+    .final-annual-discount {
+      position:relative;
+      isolation:isolate;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-top:12px;
+      padding:16px 18px;
+      overflow:hidden;
+      border:1px solid #e2ad32;
+      border-radius:16px;
+      color:#5c3900;
+      background:
+        radial-gradient(circle at 92% 16%,rgba(255,255,255,.92),transparent 29%),
+        linear-gradient(120deg,#fff4c9 0%,#f7cf69 43%,#fff0b1 70%,#d9a321 100%);
+      box-shadow:0 12px 30px rgba(174,119,5,.24),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(117,72,0,.12);
+      animation:annualDiscountReveal .58s cubic-bezier(.2,.85,.22,1) both;
+    }
+    .final-annual-discount::before {
+      content:"";
+      position:absolute;
+      z-index:-1;
+      inset:-70% auto -70% -45%;
+      width:34%;
+      transform:rotate(18deg);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.78),transparent);
+      animation:annualDiscountShimmer 3.6s ease-in-out .45s infinite;
+    }
+    .final-annual-discount::after {
+      content:"";
+      position:absolute;
+      z-index:-2;
+      right:-28px;
+      bottom:-54px;
+      width:150px;
+      height:150px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(255,255,255,.72),transparent 66%);
+    }
+    .final-annual-discount-label {
+      font-size:.79rem;
+      font-weight:950;
+      letter-spacing:.085em;
+      line-height:1.2;
+      text-transform:uppercase;
+    }
+    .final-annual-discount strong {
+      color:#6d4300;
+      font-size:clamp(1.8rem,6vw,2.7rem);
+      font-weight:1000;
+      letter-spacing:-.045em;
+      line-height:1;
+      text-align:right;
+      text-shadow:0 1px 0 rgba(255,255,255,.8),0 8px 18px rgba(111,68,0,.16);
+      white-space:nowrap;
+    }
+    @keyframes annualDiscountReveal {
+      from { opacity:0; transform:translateY(10px) scale(.97); filter:saturate(.7); }
+      to { opacity:1; transform:translateY(0) scale(1); filter:saturate(1); }
+    }
+    @keyframes annualDiscountShimmer {
+      0%,58% { left:-45%; opacity:0; }
+      66% { opacity:.9; }
+      83%,100% { left:118%; opacity:0; }
+    }
     .discount-actions { margin-top:12px; }
 
     @media(max-width:560px) {
@@ -712,7 +778,13 @@
       .comparison-table th:first-child,.comparison-table td:first-child { width:40%; }
       .comparison-table th:nth-child(2),.comparison-table td:nth-child(2),
       .comparison-table th:nth-child(3),.comparison-table td:nth-child(3) { width:30%; }
+      .final-annual-discount { padding:14px; gap:10px; }
+      .final-annual-discount-label { max-width:45%; font-size:.68rem; }
+      .final-annual-discount strong { font-size:clamp(1.65rem,9vw,2.3rem); }
       .discount-actions .btn { min-width:0; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      .final-annual-discount,.final-annual-discount::before { animation:none; }
     }
   </style>
   <link rel="stylesheet" href="./pwa.css" />
@@ -937,8 +1009,11 @@
             <tr><td>Initial payment</td><td id="originalInitial">—</td><td id="discountInitial">—</td></tr>
             <tr><td>Monthly payment</td><td id="originalMonthly">—</td><td id="discountMonthly">—</td></tr>
             <tr><td>Maintenance package</td><td id="originalAnnual">—</td><td id="discountAnnual">—</td></tr>
-            <tr><td>Discount amount / month</td><td>—</td><td id="discountAmount">—</td></tr>
           </tbody></table></div>
+          <div class="final-annual-discount">
+            <span class="final-annual-discount-label">Final Annual Discount</span>
+            <strong id="finalAnnualDiscount">—</strong>
+          </div>
           <div class="discount-actions"><button id="applyDiscount" class="btn btn-success" type="button">Apply Discount</button></div>
         </div>
       </div>
@@ -1019,7 +1094,7 @@
   }
   function calculateDiscount(state,percent){
     const overrides={...planOverrides(state),'Sales Pricing Guide!D23':'Percent Discount','Sales Pricing Guide!D24':Number(percent),'Sales Pricing Guide!D27':'YES'},w=new PlanWorkbook(WORKBOOK_MODEL,overrides),get=c=>w.get('Sales Pricing Guide',c);
-    return{amount:get('H22'),finalMonthly:get('H23'),annual:get('H24'),profit:get('H25'),margin:get('H26'),maximumSafe:get('H27'),initial:get('C28'),monthlyAfterInitial:get('F28'),status:get('I28')};
+    return{amount:get('H22'),finalMonthly:get('H23'),annual:get('H24'),annualDiscount:Math.max(0,get('C13')-get('H24')),profit:get('H25'),margin:get('H26'),maximumSafe:get('H27'),initial:get('C28'),monthlyAfterInitial:get('F28'),status:get('I28')};
   }
   function loadingDuration(random=Math.random){return 10000+Math.floor(Math.min(.999999,Math.max(0,random()))*5001)}
   function pricingLoadingDuration(random=Math.random){return 11000+Math.floor(Math.min(.999999,Math.max(0,random()))*4001)}
@@ -1078,7 +1153,7 @@
     function renderPricing(){latestCalculation=calculatePlan(state);byId('initialValue').textContent=money(latestCalculation.initial);byId('lowerMonthlyValue').textContent=money(latestCalculation.monthlyAfterInitial);byId('annualValue').textContent=money(latestCalculation.annual);renderSchedule('scheduleBody');return latestCalculation;}
     function goToStep(step){const next=Math.max(0,Math.min(2,step));if(next>state.step&&!canJump(next)){for(let i=0;i<next;i++)if(!validateStep(i,true)){state.step=i;break}}else state.step=next;document.querySelectorAll('.step-panel').forEach((panel,i)=>panel.hidden=i!==state.step);document.querySelectorAll('.step-button').forEach((button,i)=>{button.classList.toggle('active',i===state.step);button.classList.toggle('complete',i<state.step);button.setAttribute('aria-current',i===state.step?'step':'false')});byId('stepProgress').style.width=`${state.step*33.34}%`;byId('mobileBack').style.visibility=state.step===0?'hidden':'visible';byId('mobileNext').textContent=state.step===2?'Final Plan':'Continue →';if(state.step===1)renderServiceGrid(byId('serviceSearch').value);if(state.step===2)renderPricing();window.scrollTo({top:0,behavior:'smooth'});saveState();}
     function openDiscount(){if(!validateStep(2,true))return;pendingDiscountOffer=null;byId('discountPercent').value='';byId('discountResults').hidden=true;byId('discountDialog').showModal();document.body.style.overflow='hidden';setTimeout(()=>byId('discountPercent').focus(),60)}
-    function renderDiscountOffer(percent){const base=latestCalculation||renderPricing(),offer=calculateDiscount(state,percent);pendingDiscountOffer=offer;byId('originalInitial').textContent=money(base.initial);byId('discountInitial').textContent=money(offer.initial);byId('originalMonthly').textContent=money(base.monthlyAfterInitial);byId('discountMonthly').textContent=money(offer.monthlyAfterInitial);byId('originalAnnual').textContent=money(base.annual);byId('discountAnnual').textContent=money(offer.annual);byId('discountAmount').textContent=money(offer.amount);const status=byId('discountStatus');status.textContent=offer.status;status.className='discount-status '+(offer.status==='APPROVED'?'approved':offer.status==='MANAGER APPROVAL'?'manager':'stop');byId('discountResults').hidden=false;return offer;}
+    function renderDiscountOffer(percent){const base=latestCalculation||renderPricing(),offer=calculateDiscount(state,percent);pendingDiscountOffer=offer;byId('originalInitial').textContent=money(base.initial);byId('discountInitial').textContent=money(offer.initial);byId('originalMonthly').textContent=money(base.monthlyAfterInitial);byId('discountMonthly').textContent=money(offer.monthlyAfterInitial);byId('originalAnnual').textContent=money(base.annual);byId('discountAnnual').textContent=money(offer.annual);byId('finalAnnualDiscount').textContent=money(offer.annualDiscount);const status=byId('discountStatus');status.textContent=offer.status;status.className='discount-status '+(offer.status==='APPROVED'?'approved':offer.status==='MANAGER APPROVAL'?'manager':'stop');byId('discountResults').hidden=false;return offer;}
     function applyDiscount(){if(!pendingDiscountOffer){showToast('Preview the discount before applying it.',true);return}const offer={...pendingDiscountOffer};byId('discountDialog').close();document.body.style.overflow='';runWaterLoading(false,offer)}
     async function testDiscount(){const percent=Number(byId('discountPercent').value);if(!Number.isFinite(percent)||percent<0||percent>100){showToast('Enter an offer adjustment from 0% to 100%.',true);return}if(loadingController)return;const controller=new AbortController();loadingController=controller;const signal=controller.signal,duration=offerLoadingDuration(),started=performance.now(),waitUntil=elapsed=>new Promise((resolve,reject)=>{if(signal.aborted){reject(Error('cancelled'));return}const abort=()=>{clearTimeout(timer);reject(Error('cancelled'))},timer=setTimeout(()=>{signal.removeEventListener('abort',abort);resolve()},Math.max(0,elapsed-(performance.now()-started)));signal.addEventListener('abort',abort,{once:true})}),dialog=byId('discountDialog'),overlay=byId('loadingOverlay'),status=byId('loaderStatus'),fill=byId('loadingFill'),stages=[...document.querySelectorAll('.loader-stages span')],reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches,animations=[];let waterFrame=0,complete=false;dialog.close();stages.forEach((x,i)=>{x.classList.remove('done');x.textContent=['Pricing','Margin','Decision'][i]});byId('loadingTitle').textContent='Reviewing your offer.';byId('cancelLoading').textContent='Back to offer';overlay.classList.remove('departing');drawWaterProgress(0,0,reducedMotion);byId('salesApp').inert=true;document.body.style.overflow='hidden';overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');overlay.focus();fill.style.transform='scaleX(0)';status.textContent='Comparing the adjusted payment arrangement…';try{if(!reducedMotion)overlay.querySelectorAll('.water-bubble').forEach((bubble,index)=>animations.push(bubble.animate([{transform:'translate3d(0,0,0) scale(.7)',opacity:0,offset:0},{opacity:.9,offset:.15},{transform:'translate3d(5px,-100px,0) scale(1)',opacity:.7,offset:.8},{transform:'translate3d(-3px,-150px,0) scale(.8)',opacity:0,offset:1}],{duration:2500+index*220,delay:index*310,iterations:Infinity,easing:'linear'})));const timeline=loadingTimeline(),progressAnimation=fill.animate(timeline.map(frame=>({offset:frame.offset,transform:`scaleX(${frame.progress})`})),{duration:duration-650,easing:'linear',fill:'forwards'});animations.push(progressAnimation);const tick=()=>{const elapsed=Number(progressAnimation.currentTime)||0;drawWaterProgress(loadingProgressAt(timeline,elapsed/(duration-650)),elapsed,reducedMotion);waterFrame=requestAnimationFrame(tick)};waterFrame=requestAnimationFrame(tick);await waitUntil(100);stages[0].classList.add('done');status.textContent='Pricing compared. Checking the protected margin…';await waitUntil(duration*.38);stages[1].classList.add('done');status.textContent='Margin checked. Preparing the sales decision…';const offer=renderDiscountOffer(percent);await waitUntil(duration*.72);stages[2].classList.add('done');status.textContent=offer.status==='APPROVED'?'Offer is within the approved range.':offer.status==='MANAGER APPROVAL'?'Manager review is required.':'Offer is outside the protected range.';await waitUntil(duration-650);cancelAnimationFrame(waterFrame);drawWaterProgress(1,duration-650,reducedMotion);overlay.classList.add('departing');overlay.classList.remove('open');await waitUntil(duration);complete=true}catch(e){if(!signal.aborted)showToast('Could not review this offer: '+e.message,true)}finally{cancelAnimationFrame(waterFrame);animations.forEach(animation=>animation.cancel());fill.style.transform=complete?'scaleX(1)':'scaleX(0)';overlay.classList.remove('open','departing');overlay.setAttribute('aria-hidden','true');byId('salesApp').inert=false;loadingController=null;if(!dialog.open)dialog.showModal();document.body.style.overflow='hidden';if(complete&&!reducedMotion)byId('discountResults').animate([{opacity:0,transform:'translate3d(0,18px,0)'},{opacity:1,transform:'none'}],{duration:650,easing:'cubic-bezier(.16,1,.3,1)'});if(complete)playCompletionChime();(complete?byId('discountStatus'):byId('discountPercent')).focus({preventScroll:true})}}
     function renderClientView(){const calc=latestCalculation||renderPricing(),dateText=state.planDate?new Date(`${state.planDate}T12:00:00`).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):'';byId('clientPlanTitle').textContent=state.planName||'Property Care Service Plan';byId('clientMetaName').textContent=`Prepared for ${state.clientName}`;byId('clientMetaAddress').textContent=state.propertyAddress;byId('clientMetaDate').textContent=dateText;byId('clientMonthly').textContent=money(calc.monthlyAfterInitial);byId('clientInitial').textContent=money(calc.initial);byId('clientAnnual').textContent=money(calc.annual);byId('clientRep').textContent=state.salesRep?`Sales representative: ${state.salesRep}`:'';renderSchedule('clientScheduleBody')}
