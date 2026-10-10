@@ -1,6 +1,6 @@
 # ReinmanPro Service Plan — GitHub Pages
 
-This package is ready to upload to a public GitHub repository. It includes the latest calculator, water animations, client proposal, print/PDF layout, Home Screen icons, and offline app files. There is no employee login.
+This package is ready to upload to a public GitHub repository. It includes the latest calculator based on `10_03_2026 6Pm (1).xlsx`, including the corrected Interior Window Cleaning track-minutes connection, with client pricing read from the Sales Pricing Guide `PRICING SUMMARY` section, plus the water animations, client proposal, print/PDF layout, Home Screen icons, and offline app files. There is no employee login.
 
 ## Publish for the first time
 
