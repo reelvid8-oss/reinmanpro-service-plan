@@ -1,4 +1,6 @@
-# ReinmanPro Service Plan — v1.1.1 Responsive Fix
+# ReinmanPro Service Plan — v1.1.2 iPhone PDF Save Fix
+
+PDF export update: iPhone and iPad now use the native file save/share menu when supported. Choose **Save to Files**, select a folder, then tap **Save**. Cancellation leaves the calculator open and allows another attempt. If the browser cannot open the native menu, a dialog provides Open PDF and Download PDF actions with save instructions. Desktop browsers keep the normal download flow. Status messages distinguish a download request from a confirmed filesystem save; the app cannot detect which destination was chosen in the native menu. The PDF content and pricing engine are unchanged.
 
 Release: October 15, 2026. This release retains the approved premium calculator theme, 3D cards, and original banner's floating quarterly-calendar and looping checkbox animations. It removes duplicate top safe-area spacing in browser/file previews, constrains the native date field to its container, and adjusts phone/tablet layouts. Core controls initialize before optional motion effects, so an unsupported visual effect cannot prevent navigation. The loading screen keeps its 0–100% progress. The workbook model, pricing rules, initial/monthly payment calculations, discounts, consent and PDF generation remain unchanged. Existing hosted-app drafts use the same storage key. The v1.0 original package remains a separate baseline.
 
@@ -37,7 +39,7 @@ If iOS clears website data, the app is removed/reinstalled, or an initial downlo
 
 ## Save a client PDF
 
-Create the plan, open the **Final Plan**, enter the Housecall Pro estimate number, and complete the customer authorization and signature. Tap **Save as PDF** to download the signed plan. Depending on the device/browser, choose the download location or use **Share → Save to Files**. Send the saved PDF to the client manually. Review the saved PDF once on your devices; it includes the selected services with their terms, highlighted enrollment total, and completed customer consent, and excludes calculator controls and internal cost breakdown.
+Create the plan, open the **Final Plan**, enter the Housecall Pro estimate number, and complete the customer authorization and signature. Tap **Save as PDF** or **Save PDF**. On iPhone/iPad, choose **Save to Files → select a folder → Save** in the native menu. If a fallback dialog appears, tap **Open PDF**, then **Share → Save to Files → Save** in the PDF viewer. On desktop, the browser starts a normal download or displays its save dialog. Opening a PDF preview alone does not confirm it was saved to Files. Send the saved PDF to the client manually. Review the saved PDF once on your devices; it includes the selected services with their terms, highlighted enrollment total, and completed customer consent, and excludes calculator controls and internal cost breakdown.
 
 ## Update the app later
 

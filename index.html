@@ -1253,6 +1253,15 @@
     }
     @media print { .app-startup-notice { display:none!important; } }
   </style>
+  <style id="pdf-save-controls">
+    .pdf-save-dialog { width:min(500px,calc(100% - 28px)); max-height:calc(100dvh - 40px); padding:24px; border:1px solid #c6e5f6; border-radius:20px; color:#12344e; background:#fff; box-shadow:0 25px 65px #061b3840; overflow:auto; }
+    .pdf-save-dialog::backdrop { background:#061b3899; backdrop-filter:blur(5px); }
+    .pdf-save-dialog p { color:#607d91; font-size:.88rem; line-height:1.6; }
+    .pdf-save-dialog .pdf-file-name { color:#123f5b; padding:12px; border-radius:10px; background:#edf8ff; font-size:.8rem; font-weight:700; overflow-wrap:anywhere; }
+    .pdf-export-actions { display:grid; gap:12px; margin-top:20px; }
+    .pdf-export-actions .btn { min-height:48px; text-decoration:none; text-align:center; }
+    @media print { .pdf-save-dialog { display:none!important; } }
+  </style>
 </head>
 <body>
   <div id="salesApp" class="app-shell">
@@ -1448,6 +1457,17 @@
       <button id="cancelLoading" class="loader-cancel" type="button">Back to review</button>
     </div>
   </div>
+
+  <dialog id="pdfSaveDialog" class="pdf-save-dialog" aria-labelledby="pdfSaveTitle" aria-describedby="pdfSaveInstructions">
+    <h2 id="pdfSaveTitle">Save your signed PDF</h2>
+    <p id="pdfSaveInstructions">The save menu is unavailable in this browser. Tap <strong>Open PDF</strong>, then tap <strong>Share → Save to Files → Save</strong> in the PDF viewer. Your calculator stays open in this tab.</p>
+    <p id="pdfExportFileName" class="pdf-file-name"></p>
+    <div class="pdf-export-actions">
+      <a id="pdfOpenLink" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Open PDF</a>
+      <a id="pdfDownloadLink" class="btn btn-secondary" download>Download PDF</a>
+      <form method="dialog"><button class="btn btn-secondary" type="submit" style="width:100%">Back to plan</button></form>
+    </div>
+  </dialog>
 
   <dialog id="newPlanDialog" class="new-plan-dialog" aria-labelledby="newPlanTitle" aria-describedby="newPlanDescription">
     <form method="dialog">
@@ -2057,10 +2077,43 @@
       let pdf='%PDF-1.4\n',offsets=[0];objects.forEach((object,index)=>{offsets.push(encoder.encode(pdf).length);pdf+=`${index+1} 0 obj\n${object}\nendobj\n`});const xref=encoder.encode(pdf).length;pdf+=`xref\n0 ${objects.length+1}\n0000000000 65535 f \n`;for(let i=1;i<=objects.length;i++)pdf+=`${String(offsets[i]).padStart(10,'0')} 00000 n \n`;pdf+=`trailer\n<< /Size ${objects.length+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;return new Blob([encoder.encode(pdf)],{type:'application/pdf'});
     }
     function safeFileName(value){return String(value||'client').trim().replace(/[^a-z0-9]+/gi,'-').replace(/^-+|-+$/g,'').slice(0,60)||'client'}
-    function saveSignedPdf(){
+    let pdfExportBusy=false,pdfExportUrl=null;
+    function openPdfSaveFallback(blob,fileName){
+      if(pdfExportUrl)URL.revokeObjectURL(pdfExportUrl);
+      pdfExportUrl=URL.createObjectURL(blob);
+      byId('pdfOpenLink').href=pdfExportUrl;byId('pdfDownloadLink').href=pdfExportUrl;byId('pdfDownloadLink').download=fileName;byId('pdfExportFileName').textContent=fileName;
+      byId('consentStatus').textContent='PDF ready. Open it and choose Share → Save to Files → Save to keep a copy.';
+      const dialog=byId('pdfSaveDialog');if(!dialog.open){dialog.dataset.previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal()}
+    }
+    async function saveSignedPdf(){
+      if(pdfExportBusy)return;
       if(!consentIsComplete()){updateConsentReady();showToast('Complete the authorization before saving the PDF.',true);return}
-      const calc=latestCalculation||renderPricing(),blob=buildSignedPlanPdf(calc),fileName=`ReinmanPro-Service-Plan-${safeFileName(state.clientName)}.pdf`,url=URL.createObjectURL(blob),link=document.createElement('a');
-      link.href=url;link.download=fileName;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);byId('consentStatus').textContent='Signed PDF saved to this device. You can now send it to the client manually.';showToast('Signed PDF saved.');
+      pdfExportBusy=true;byId('printPlan').disabled=true;byId('savePdfConsent').disabled=true;
+      try{
+        const calc=latestCalculation||renderPricing(),blob=buildSignedPlanPdf(calc),fileName=`ReinmanPro-Service-Plan-${safeFileName(state.clientName)}.pdf`,nav=window.navigator||{},appleMobile=/iPad|iPhone|iPod/.test(nav.userAgent||'')||(nav.platform==='MacIntel'&&nav.maxTouchPoints>1);
+        if(appleMobile){
+          let file=null,canShareFiles=false;
+          if(typeof File==='function'&&typeof nav.share==='function'&&typeof nav.canShare==='function'){
+            try{file=new File([blob],fileName,{type:'application/pdf'});canShareFiles=nav.canShare({files:[file]})}catch{}
+          }
+          if(canShareFiles){
+            byId('consentStatus').textContent='Choose Save to Files, select a folder, then tap Save.';
+            try{
+              await nav.share({files:[file],title:fileName});
+              byId('consentStatus').textContent='Save menu closed. If you selected Save to Files, your PDF is in that folder.';
+            }catch(error){
+              if(error?.name==='AbortError'){byId('consentStatus').textContent='Saving canceled. Tap Save PDF to try again.';return}
+              openPdfSaveFallback(blob,fileName);
+            }
+            return;
+          }
+          openPdfSaveFallback(blob,fileName);return;
+        }
+        const url=URL.createObjectURL(blob),link=document.createElement('a');
+        link.href=url;link.download=fileName;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+        byId('consentStatus').textContent='PDF download requested. Check your browser’s Downloads or save dialog.';showToast('PDF download requested.');
+      }catch(error){byId('consentStatus').textContent='Could not prepare the PDF. Please try again.';showToast('Could not prepare the PDF. Please try again.',true)}
+      finally{pdfExportBusy=false;byId('printPlan').disabled=false;const status=byId('consentStatus').textContent;updateConsentReady();byId('consentStatus').textContent=status}
     }
     function prepareLoadingPlanner(){
       const selected=selectedServices();
@@ -2155,6 +2208,7 @@
       document.addEventListener('visibilitychange',()=>{document.documentElement.classList.toggle('document-hidden',document.hidden);if(document.hidden)resetCard()});
     }
     function initialize(){
+      byId('pdfSaveDialog').addEventListener('close',()=>{document.body.style.overflow=byId('pdfSaveDialog').dataset.previousOverflow||''});
       byId('loadingOverlay').addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();loadingController?.abort()}if(event.key==='Tab'){event.preventDefault();byId('cancelLoading').focus()}});
       syncBasicFields();bindBasicFields();renderServiceGrid();bindConfigurationEvents();
       byId('serviceSearch').addEventListener('input',event=>renderServiceGrid(event.target.value));
