@@ -1,6 +1,6 @@
 # ReinmanPro Service Plan — GitHub Pages
 
-This package is ready to upload to a public GitHub repository. It includes the latest calculator based on `10_03_2026 6Pm (1).xlsx`, with updated Service Pricing Rules; selectable months within Q1–Q4; the standard 25% initial-payment plan; a side-by-side No Initial Payment option; clear enrollment-payment timing; selected months in the Final Plan; updated Customer Consent authorization and key terms; clickable Full Terms links; and an improved saved-PDF layout. It also includes the water animations, Home Screen icons, and offline app files. There is no employee login.
+This package is ready to upload to a public GitHub repository. It includes the latest calculator based on `10_03_2026 6Pm (1).xlsx`, with updated Service Pricing Rules; selectable months within Q1–Q4; the standard 25% initial-payment plan; a readable side-by-side No Initial Payment option; clear enrollment-payment timing; selected months in the Final Plan; client-facing terms grouped directly beneath every selected service in the Plan Preview and Final Plan; matching selected-service terms in the saved PDF; updated Customer Consent authorization and key terms; clickable Full Terms links; and an improved, automatically paginated saved-PDF layout. It also includes the water animations, Home Screen icons, and offline app files. There is no employee login.
 
 ## Publish for the first time
 

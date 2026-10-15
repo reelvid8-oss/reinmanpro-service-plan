@@ -653,6 +653,13 @@
     .schedule-table td { width:13%; padding:12px 4px; border-bottom:1px solid #e7eef2; text-align:center; }
     .schedule-table td:first-child { width:48%; padding-left:13px; padding-right:8px; overflow-wrap:anywhere; color:var(--navy-950); text-align:left; font-weight:800; }
     .schedule-table tr:last-child td { border-bottom:0; }
+    .schedule-table .schedule-service-row td { border-bottom:0; }
+    .schedule-table .schedule-terms-cell { width:auto; padding:0 12px 14px; border-bottom:1px solid #dbe8ee; color:inherit; background:#fff; text-align:left; font-weight:400; }
+    .schedule-inline-terms { padding:13px 15px; border:1px solid #d6e5ec; border-left:4px solid var(--blue-600); border-radius:11px; background:linear-gradient(135deg,#fbfdfe,#f4fafc); }
+    .schedule-inline-terms h4 { margin:0; color:#123d58; font-size:.82rem; }
+    .schedule-inline-terms ul { margin:8px 0 0; padding-left:18px; color:#506976; font-size:.72rem; font-weight:400; line-height:1.5; }
+    .schedule-inline-terms li+li { margin-top:5px; }
+    .schedule-table .schedule-terms-footnote-cell { width:auto; padding:11px 14px 13px; border-bottom:0; color:#667d89; background:#f6fafc; text-align:left; font-size:.68rem; font-weight:500; line-height:1.45; }
     .schedule-service { display:flex; align-items:center; gap:7px; min-width:0; flex-wrap:wrap; }
     .schedule-service-name { min-width:0; }
     .schedule-service-qty { display:inline-flex; align-items:center; min-height:22px; padding:3px 7px; border:1px solid rgba(16,121,170,.2); border-radius:999px; background:linear-gradient(135deg,#edfaff,#e1f3fa); color:#07587e; font-size:.67rem; font-weight:900; line-height:1; white-space:nowrap; box-shadow:inset 0 1px 0 rgba(255,255,255,.85); }
@@ -820,7 +827,8 @@
     .payment-comparison tr:last-child td { border-bottom:0; }
     .payment-comparison th:first-child,.payment-comparison td:first-child { text-align:left; }
     .payment-comparison th { color:#fff; background:var(--navy-900); font-size:.74rem; text-transform:uppercase; }
-    .payment-comparison th:nth-child(3),.payment-comparison td:nth-child(3) { background:#f0faf2; }
+    .payment-comparison td:nth-child(3) { background:#f0faf2; }
+    .payment-comparison th:nth-child(3) { color:#fff; background:#287b3d; }
     .payment-comparison td { font-weight:800; }
     .payment-comparison td:first-child { color:var(--muted); font-weight:750; }
     .payment-dialog-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
@@ -932,7 +940,7 @@
             </div>
             <div class="field">
               <label for="planName">Plan name</label>
-              <input id="planName" value="Property Care Service Plan" />
+              <input id="planName" value="ReinmanPro Preventive Home Maintenance Plan" />
             </div>
             <div class="field full">
               <label class="required" for="propertyAddress">Property address</label>
@@ -1031,7 +1039,7 @@
 
           <article class="schedule-card">
             <div class="schedule-heading">
-              <div><p class="eyebrow">Plan overview</p><h3>Your Services &amp; Maintenance Schedule</h3></div>
+              <div><p class="eyebrow">Plan overview</p><h3>ReinmanPro Preventive Home Maintenance Plan</h3></div>
               <button id="planOptions" class="plan-options" type="button" aria-label="Press and hold for 2 seconds to open the Discount Plan" title="Press and hold for 2 seconds">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6"/></svg>
               </button>
@@ -1173,7 +1181,7 @@
       <section class="proposal-hero">
         <div class="proposal-brand">REINMANPRO INC.</div>
         <p class="proposal-kicker">Prepared service plan</p>
-        <h1 id="clientPlanTitle">Property Care Service Plan</h1>
+        <h1 id="clientPlanTitle">ReinmanPro Preventive Home Maintenance Plan</h1>
         <div class="proposal-meta"><span id="clientMetaName"></span><span id="clientMetaAddress"></span><span id="clientMetaDate"></span></div>
       </section>
       <div class="proposal-body">
@@ -1349,14 +1357,150 @@
       {id:'furniture',row:52,name:'Furniture Washing',summary:'Standard and detailed cleaning time',fields:[{key:'quantity',cell:'B52',label:'Standard Washing Time',unit:'minutes',type:'number',required:true,positive:true},{key:'extraBrush',cell:'I52',label:'Extra Brush / Detail Minutes',unit:'minutes',type:'number',required:true,default:0}]}
     ];
     const byId=id=>document.getElementById(id),safe=text=>String(text??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'})[c]),money=value=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(value)||0),storageKey='reinmanpro-service-plan-v2:'+new URL('.',document.baseURI).pathname;
-    const QUARTER_MONTHS={1:['January','February','March'],2:['April','May','June'],3:['July','August','September'],4:['October','November','December']},MONTH_SHORT={January:'Jan',February:'Feb',March:'Mar',April:'Apr',May:'May',June:'Jun',July:'Jul',August:'Aug',September:'Sep',October:'Oct',November:'Nov',December:'Dec'},TERMS_URL='https://reinmanpro.com/home-maintenance-plan/terms/';
+    const QUARTER_MONTHS={1:['January','February','March'],2:['April','May','June'],3:['July','August','September'],4:['October','November','December']},MONTH_SHORT={January:'Jan',February:'Feb',March:'Mar',April:'Apr',May:'May',June:'Jun',July:'Jul',August:'Aug',September:'Sep',October:'Oct',November:'Nov',December:'Dec'},TERMS_URL='https://reinmanpro.com/home-maintenance-plan/terms/',PLAN_TITLE='ReinmanPro Preventive Home Maintenance Plan';
+    const SERVICE_TERMS={
+      roof:{
+        title:'Roof Washing',
+        items:[
+          'Includes approved routine roof cleaning, ordinary organic-buildup treatment, accessible loose-debris removal, and limited visual observations for the area listed in the accepted estimate.',
+          'Cleaning methods and roof access depend on material compatibility, roof condition, weather, and safety. Work may be modified or postponed when a roof is fragile or unsafe.',
+          'Roof repairs, leak testing, structural evaluation, roof certification, and roofing-system warranties are not included. Permanent staining, deterioration, or pre-existing defects may remain.'
+        ]
+      },
+      bird:{
+        title:'Bird Out Maintenance',
+        items:[
+          'Includes only the approved accessible bird-debris cleanup, routine cleaning, visual observation of bird activity, and review of existing deterrents listed in the accepted estimate.',
+          'This maintenance does not guarantee permanent removal of birds or future nesting. Active nests, eggs, chicks, protected wildlife, or unsafe contamination may require the work to be modified or postponed.',
+          'Repair or replacement of spikes, mesh, netting, wiring, shock systems, and other deterrents is not included unless separately approved.'
+        ]
+      },
+      gutter:{
+        title:'Gutter Cleaning',
+        items:[
+          'Includes removal of accessible ordinary debris and maintenance rinsing for the approved gutter areas and downspouts listed in the accepted estimate.',
+          'Gutter replacement, structural repair, underground drain clearing, concealed drainage repair, and correction of damaged gutter alignment are not included.',
+          'Routine cleaning does not guarantee that gutters will remain free from future blockage or overflow caused by weather, trees, roofing debris, or other conditions.'
+        ]
+      },
+      house:{
+        title:'House Soft Washing',
+        items:[
+          'Approved exterior walls, fascia, eaves, siding, and trim are cleaned using compatible solutions and controlled low-pressure methods. Cobweb removal is included only when listed in the accepted estimate.',
+          'Repainting, repairs, restoration of oxidation, and removal of permanent staining are not included. Loose paint, damaged stucco, failing coatings, or other fragile surfaces may be excluded for safety.'
+        ]
+      },
+      wall:{
+        title:'Wall / Fence Washing',
+        items:[
+          'Only the approved wall and fence areas are cleaned using methods appropriate for the observed material and condition.',
+          'Deteriorated stucco, loose paint, weakened wood, failing coatings, cracks, or unstable materials may be excluded or require a separate proposal.',
+          'Efflorescence, corrosion, deep stains, fading, and existing deterioration may remain. Cleaning does not repair a wall or fence.'
+        ]
+      },
+      fan:{
+        title:'Ceiling Fan Cleaning',
+        items:[
+          'Includes routine external cleaning of approved, safely accessible fan blades and housings while the fan is switched off.',
+          'Electrical or mechanical repairs, balancing, rewiring, disassembly, and fixture replacement are not included. Unsafe or unstable fixtures may be excluded.'
+        ]
+      },
+      filter:{
+        title:'AC Filter Replacement',
+        items:[
+          'Only the approved filter sizes, quantities, accessible locations, and replacement frequency listed in the accepted estimate are included. Filter supply is included only when stated in that estimate.',
+          'HVAC diagnosis, system adjustments, refrigerant work, wiring, equipment repair, and performance certification are not included.',
+          'Unsafe or inaccessible equipment may require service by a qualified HVAC provider.'
+        ]
+      },
+      coil:{
+        title:'AC Coil Cleaning',
+        items:[
+          'Service is limited to approved external cleaning of safely accessible condenser coils and ordinary loose debris around the unit.',
+          'Electrical-panel removal, wiring work, refrigerant handling, mechanical repair, electrical service, performance testing, and diagnosis are not included.',
+          'Work will proceed only when the proposed activity is permitted by applicable licensing and insurance requirements; otherwise a qualified HVAC provider may be recommended.'
+        ]
+      },
+      can:{
+        title:'Garbage Can Cleaning',
+        items:[
+          'Routine cleaning applies only to the approved number of cans and addresses ordinary dirt, residue, and buildup.',
+          'Deodorizing or sanitizing is included only when specifically listed in the accepted estimate.',
+          'Complete or permanent removal of odors, insects, rodents, or contamination is not guaranteed. Hazardous contamination may require separate specialized service.'
+        ]
+      },
+      window:{
+        title:'Exterior Window Cleaning',
+        items:[
+          'Includes exterior glass and only the approved quantities and ancillary surfaces listed in the accepted estimate. Interior glass, screens, tracks, and hardware are separate unless expressly included.',
+          'Glass repair or replacement, seal replacement, and correction of damaged tracks or rollers are not included. Unsafe heights, unstable windows, or unsuitable glass and framing may be declined.',
+          'Routine cleaning does not guarantee removal of permanent hard-water etching, scratches, cloudiness, failed seals, or existing glass damage.'
+        ]
+      },
+      interiorWindow:{
+        title:'Interior Window Cleaning',
+        items:[
+          'Includes only the approved interior glass and separately selected track quantities listed in the accepted estimate. Screens and other ancillary surfaces are included only when stated.',
+          'The Client must provide safe interior access and move fragile or valuable items when reasonably requested. Unsafe, unstable, or inaccessible windows may be excluded.',
+          'Glass repair, seal replacement, track or roller repair, and removal of permanent hard-water etching, scratches, cloudiness, or existing glass damage are not included.'
+        ]
+      },
+      solar:{
+        title:'Solar Cleaning',
+        items:[
+          'Includes approved solar-panel surface cleaning and limited non-contact observation of reasonably visible components.',
+          'ReinmanPro will not disconnect connectors, handle wiring, open electrical enclosures, perform electrical testing, diagnose faults, repair equipment, or certify the system.',
+          'Energy production, savings, and preservation of manufacturer warranties are not guaranteed.'
+        ]
+      },
+      light:{
+        title:'Exterior Light Fixture Cleaning',
+        items:[
+          'Includes ordinary cleaning of approved, safely accessible exterior fixture lenses and casings, including accessible dust, insect debris, and cobwebs.',
+          'Electrical service, rewiring, bulb replacement, fixture removal, performance testing, and repairs are not included unless separately and lawfully approved.',
+          'Unsafe, damaged, loose, or inaccessible fixtures may be excluded.'
+        ]
+      },
+      shower:{
+        title:'Shower Glass Door Cleaning',
+        items:[
+          'May include approved glass cleaning, ordinary soap-scum removal, compatible hardware detailing, and light lubrication when listed in the accepted estimate.',
+          'Glass replacement, hardware repair, door adjustment, hinge or roller replacement, and structural stabilization are not included.',
+          'Routine cleaning does not guarantee removal of permanent hard-water etching, scratches, cloudiness, failed seals, or existing glass and hardware damage.'
+        ]
+      },
+      floor:{
+        title:'Exterior Floor Rinsing',
+        items:[
+          'This is routine maintenance rinsing of the approved exterior floor area and is not restorative pressure washing.',
+          'Heavy oil, rust, grease, gum, deep staining, and severe buildup removal are not included unless separately approved.',
+          'Cleaning methods and results depend on the surface material, age, condition, existing damage, and type of contamination.'
+        ]
+      },
+      turf:{
+        title:'Artificial Turf Cleaning',
+        items:[
+          'Service is limited to the approved measured area and compatible routine debris removal, light rinsing, and grooming when suitable for the turf construction.',
+          'Deep pet-urine remediation, guaranteed odor removal, infill extraction or replacement, pet-waste pickup, seam repair, drainage correction, and turf replacement are not included unless separately approved.',
+          'Pre-existing loose seams, drainage problems, odors, and material damage may remain.'
+        ]
+      },
+      furniture:{
+        title:'Furniture Washing',
+        items:[
+          'Routine maintenance applies only to the approved outdoor furniture items and includes compatible light rinsing and brushing when appropriate.',
+          'Fabric restoration, delicate-material treatment, upholstery deep cleaning, permanent stain removal, and furniture repair are not included.',
+          'Complete drying is not guaranteed. Large, fragile, heavy, expensive, or specialty items remain the Client\'s responsibility unless otherwise agreed.'
+        ]
+      }
+    };
     const emptyItem=service=>({quarters:[],months:{},fields:Object.fromEntries(service.fields.map(field=>[field.key,field.default??'']))});
-    const initialState=()=>({step:0,clientName:'',planName:'Property Care Service Plan',propertyAddress:'',clientEmail:'',clientPhone:'',totalRoundtripMileage:'',roundtripTravelTime:'',salesRep:'Mark',planDate:new Date().toISOString().slice(0,10),paymentOption:'initial25',housecallProEstimate:'',consentAuthorized:false,signatureStrokes:[],consentSignedDate:'',selected:{}});
+    const initialState=()=>({step:0,clientName:'',planName:PLAN_TITLE,propertyAddress:'',clientEmail:'',clientPhone:'',totalRoundtripMileage:'',roundtripTravelTime:'',salesRep:'Mark',planDate:new Date().toISOString().slice(0,10),paymentOption:'initial25',housecallProEstimate:'',consentAuthorized:false,signatureStrokes:[],consentSignedDate:'',selected:{}});
     let state=loadState(),latestCalculation=null,pendingDiscountOffer=null,loadingController=null,audioContext=null;
     function ensureAudio(){const AudioEngine=window.AudioContext||window.webkitAudioContext;if(!AudioEngine)return null;try{if(!audioContext)audioContext=new AudioEngine();if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});return audioContext}catch{return null}}
     function playCompletionChime(){const context=ensureAudio();if(!context)return;try{const master=context.createGain(),start=context.currentTime+.035;master.gain.setValueAtTime(.0001,start);master.gain.exponentialRampToValueAtTime(.14,start+.035);master.gain.exponentialRampToValueAtTime(.0001,start+1.05);master.connect(context.destination);[[659.25,0],[880,.13],[1174.66,.27]].forEach(([frequency,delay],index)=>{const oscillator=context.createOscillator(),gain=context.createGain(),time=start+delay;oscillator.type=index===2?'sine':'triangle';oscillator.frequency.setValueAtTime(frequency,time);gain.gain.setValueAtTime(.0001,time);gain.gain.exponentialRampToValueAtTime(index===2?.32:.22,time+.025);gain.gain.exponentialRampToValueAtTime(.0001,time+.58);oscillator.connect(gain);gain.connect(master);oscillator.start(time);oscillator.stop(time+.62)})}catch{}}
     function normalizeFilterSize(value){return String(value||'').trim().replace(/\s*[xX×]\s*/g,'×')}
-    function loadState(){const fallback=initialState();try{const saved=JSON.parse(localStorage.getItem(storageKey)),next=saved?{...fallback,...saved,salesRep:saved.salesRep?.trim()?saved.salesRep:'Mark',step:0}:fallback,filter=next.selected?.filter;if(!['initial25','noInitial'].includes(next.paymentOption))next.paymentOption='initial25';if(!Array.isArray(next.signatureStrokes))next.signatureStrokes=[];for(const service of SERVICES){const item=next.selected?.[service.id];if(!item)continue;if(!Array.isArray(item.quarters))item.quarters=[];if(!item.months||typeof item.months!=='object')item.months={};for(const q of item.quarters)item.months[q]=Array.isArray(item.months[q])?item.months[q].filter(month=>QUARTER_MONTHS[q]?.includes(month)):[];}if(filter?.fields){const options=SERVICES.find(service=>service.id==='filter').fields.find(field=>field.key==='size1').options;for(const key of ['size1','size2']){const normalized=normalizeFilterSize(filter.fields[key]);filter.fields[key]=options.includes(normalized)?normalized:''}}return next}catch{return fallback}}
+    function loadState(){const fallback=initialState();try{const saved=JSON.parse(localStorage.getItem(storageKey)),next=saved?{...fallback,...saved,salesRep:saved.salesRep?.trim()?saved.salesRep:'Mark',step:0}:fallback,filter=next.selected?.filter;if(!next.planName?.trim()||next.planName==='Property Care Service Plan')next.planName=PLAN_TITLE;if(!['initial25','noInitial'].includes(next.paymentOption))next.paymentOption='initial25';if(!Array.isArray(next.signatureStrokes))next.signatureStrokes=[];for(const service of SERVICES){const item=next.selected?.[service.id];if(!item)continue;if(!Array.isArray(item.quarters))item.quarters=[];if(!item.months||typeof item.months!=='object')item.months={};for(const q of item.quarters)item.months[q]=Array.isArray(item.months[q])?item.months[q].filter(month=>QUARTER_MONTHS[q]?.includes(month)):[];}if(filter?.fields){const options=SERVICES.find(service=>service.id==='filter').fields.find(field=>field.key==='size1').options;for(const key of ['size1','size2']){const normalized=normalizeFilterSize(filter.fields[key]);filter.fields[key]=options.includes(normalized)?normalized:''}}return next}catch{return fallback}}
     function saveState(){try{localStorage.setItem(storageKey,JSON.stringify(state))}catch{showToast('This draft could not be saved on this device.',true)}}
     const selectedServices=()=>SERVICES.filter(service=>state.selected[service.id]);
     function syncBasicFields(){for(const id of ['clientName','planName','propertyAddress','clientEmail','clientPhone','totalRoundtripMileage','roundtripTravelTime','salesRep','planDate'])if(byId(id))byId(id).value=state[id]??''}
@@ -1413,7 +1557,8 @@
     function formatScheduleQuantity(value){return new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(Number(value)||0)}
     function selectedMonthLabel(item,q,short=true){return(item.months?.[q]||[]).map(month=>short?MONTH_SHORT[month]:month).join(', ')}
     function paymentBreakdown(calc,option=state.paymentOption){const annualCents=Math.round((Number(calc?.annual)||0)*100),initialCents=option==='noInitial'?0:Math.round(annualCents*.25),balanceCents=annualCents-initialCents,recurringCents=Math.round(balanceCents/12),firstCents=balanceCents-recurringCents*11;return{option,optionLabel:option==='noInitial'?'No Initial Payment':'25% Initial Payment',initial:initialCents/100,first:firstCents/100,recurring:recurringCents/100,dueAtEnrollment:(initialCents+firstCents)/100,balance:balanceCents/100,annual:annualCents/100}}
-    function renderSchedule(targetId){byId(targetId).innerHTML=selectedServices().map(service=>{const item=state.selected[service.id],quarters=item.quarters,quantity=serviceScheduleQuantity(service,item);return`<tr><td><span class="schedule-service"><span class="schedule-service-name">${safe(service.name)}</span><span class="schedule-service-qty">${formatScheduleQuantity(quantity.value)} ${safe(quantity.unit)}</span></span></td>${[1,2,3,4].map(q=>`<td>${quarters.includes(q)?`<span class="schedule-cell"><span class="schedule-check" aria-label="Included">✓</span><span class="schedule-months">${safe(selectedMonthLabel(item,q))}</span></span>`:'<span class="schedule-empty">—</span>'}</td>`).join('')}</tr>`}).join('')}
+    function renderSchedule(targetId){const rows=selectedServices().map(service=>{const item=state.selected[service.id],quarters=item.quarters,quantity=serviceScheduleQuantity(service,item),terms=SERVICE_TERMS[service.id];return`<tr class="schedule-service-row"><td><span class="schedule-service"><span class="schedule-service-name">${safe(service.name)}</span><span class="schedule-service-qty">${formatScheduleQuantity(quantity.value)} ${safe(quantity.unit)}</span></span></td>${[1,2,3,4].map(q=>`<td>${quarters.includes(q)?`<span class="schedule-cell"><span class="schedule-check" aria-label="Included">✓</span><span class="schedule-months">${safe(selectedMonthLabel(item,q))}</span></span>`:'<span class="schedule-empty">—</span>'}</td>`).join('')}</tr>${terms?`<tr class="schedule-terms-row"><td class="schedule-terms-cell" colspan="5"><div class="schedule-inline-terms"><h4>${safe(service.name)} Service Terms</h4><ul>${terms.items.map(term=>`<li>${safe(term)}</li>`).join('')}</ul></div></td></tr>`:''}`}).join('');byId(targetId).innerHTML=rows+(rows?`<tr class="schedule-terms-footnote-row"><td class="schedule-terms-footnote-cell" colspan="5">These service terms supplement the accepted Housecall Pro estimate and the Full Service Plan Terms &amp; Conditions.</td></tr>`:'')}
+    function selectedServiceTerms(){return selectedServices().map(service=>({service,terms:SERVICE_TERMS[service.id]})).filter(entry=>entry.terms)}
     function renderPricing(){latestCalculation=calculatePlan(state);const payment=paymentBreakdown(latestCalculation);byId('initialValue').textContent=money(payment.initial);byId('lowerMonthlyValue').textContent=money(payment.recurring);byId('annualValue').textContent=money(payment.annual);byId('initialValueNote').textContent=payment.option==='noInitial'?'No initial payment selected':'25% of the annual maintenance price';byId('monthlyValueNote').textContent=payment.option==='noInitial'?'Annual price divided into 12 payments':'Remaining 75% divided into 12 payments';byId('paymentChoiceTitle').textContent=payment.option==='noInitial'?'No Initial Payment Applied':'25% Initial Payment Applied';byId('paymentChoiceSummary').textContent=`${money(payment.dueAtEnrollment)} total is intended to be collected upon enrollment, including the first monthly payment.`;byId('openPaymentOptions').textContent=payment.option==='noInitial'?'Compare Payment Options':'No Initial Payment Option';renderSchedule('scheduleBody');return latestCalculation;}
     function goToStep(step){const next=Math.max(0,Math.min(2,step));if(next>state.step&&!canJump(next)){for(let i=0;i<next;i++)if(!validateStep(i,true)){state.step=i;break}}else state.step=next;document.querySelectorAll('.step-panel').forEach((panel,i)=>panel.hidden=i!==state.step);document.querySelectorAll('.step-button').forEach((button,i)=>{button.classList.toggle('active',i===state.step);button.classList.toggle('complete',i<state.step);button.setAttribute('aria-current',i===state.step?'step':'false')});byId('stepProgress').style.width=`${state.step*33.34}%`;byId('mobileBack').style.visibility=state.step===0?'hidden':'visible';byId('mobileNext').textContent=state.step===2?'Final Plan':'Continue →';if(state.step===1)renderServiceGrid(byId('serviceSearch').value);if(state.step===2)renderPricing();window.scrollTo({top:0,behavior:'smooth'});saveState();}
     function openDiscount(){if(!validateStep(2,true))return;pendingDiscountOffer=null;byId('discountPercent').value='';byId('discountResults').hidden=true;byId('discountDialog').showModal();document.body.style.overflow='hidden';setTimeout(()=>byId('discountPercent').focus(),60)}
@@ -1465,7 +1610,7 @@
     }
     function renderClientView(){
       const calc=latestCalculation||renderPricing(),dateText=formatLongDate(state.planDate),payments=paymentSchedule(calc.annual);
-      byId('clientPlanTitle').textContent=state.planName||'Property Care Service Plan';
+      byId('clientPlanTitle').textContent=state.planName||PLAN_TITLE;
       byId('clientMetaName').textContent=`Prepared for ${state.clientName}`;
       byId('clientMetaAddress').textContent=state.propertyAddress;
       byId('clientMetaDate').textContent=dateText;
@@ -1515,7 +1660,7 @@
       const payments=paymentSchedule(calc.annual);let s='',y=674;
       s+=pdfFill(0,700,612,92,PDF_COLOR.navy);s+=pdfFill(0,696,612,4,PDF_COLOR.teal);
       s+=pdfText('REINMANPRO INC.',36,754,20,true,PDF_COLOR.white);s+=pdfText('PREVENTIVE HOME MAINTENANCE',36,736,8,true,'0.65 0.90 0.98');s+=pdfText('PREPARED SERVICE PLAN',420,750,10,true,PDF_COLOR.white);s+=pdfText(formatLongDate(state.planDate),452,733,8,false,'0.80 0.92 0.97');
-      s+=pdfText(state.planName||'Property Care Service Plan',36,y,18,true);s+=pdfText(`Prepared for  ${state.clientName}`,36,y-23,9,true);s+=pdfText(state.propertyAddress,36,y-39,8,false,PDF_COLOR.muted);
+      s+=pdfText(state.planName||PLAN_TITLE,36,y,18,true);s+=pdfText(`Prepared for  ${state.clientName}`,36,y-23,9,true);s+=pdfText(state.propertyAddress,36,y-39,8,false,PDF_COLOR.muted);
       const cards=[{x:36,color:'0.05 0.42 0.62',label:'INITIAL PAYMENT',value:money(payments.initial),sub:payments.option==='noInitial'?'No initial payment selected':'25% credited to annual price',text:PDF_COLOR.white},{x:216,color:PDF_COLOR.green,label:'MONTHLY PAYMENT',value:money(payments.recurring),sub:'First monthly due at enrollment',text:PDF_COLOR.white},{x:396,color:'0.96 0.74 0.25',label:'ANNUAL MAINTENANCE PRICE',value:money(calc.annual),sub:'First-year projected price',text:PDF_COLOR.ink}];
       for(const card of cards){s+=pdfFill(card.x,558,164,68,card.color);s+=pdfText(card.label,card.x+12,609,7,true,card.text);s+=pdfText(card.value,card.x+12,582,18,true,card.text);s+=pdfText(card.sub,card.x+12,568,7,false,card.text)}
       s+=pdfText('SERVICES & MAINTENANCE SCHEDULE',36,532,11,true);s+=pdfFill(36,500,540,24,PDF_COLOR.navy);s+=pdfText('INCLUDED SERVICE',46,509,7,true,PDF_COLOR.white);s+=pdfText('QUANTITY',280,509,7,true,PDF_COLOR.white);['Q1','Q2','Q3','Q4'].forEach((label,index)=>s+=pdfText(label,412+index*42,509,7,true,PDF_COLOR.white));y=482;
@@ -1541,19 +1686,31 @@
       const keyTerms=['- Month-to-month membership; the 12-month schedule is not a mandatory commitment.','- The accepted Housecall Pro estimate and Schedule A control scope, timing and pricing.','- Routine maintenance only; repairs, restoration and licensed inspections are excluded.','- Cancel anytime with no early termination penalty; future recurring charges stop when effective.','- Eligible unused prepaid amounts are reconciled/refunded; weather or access does not forfeit unperformed work.'];keyTerms.forEach((line,index)=>s+=pdfText(line,48,252-index*13,6.5,false,PDF_COLOR.ink));s+=pdfText('FULL TERMS: reinmanpro.com/home-maintenance-plan/terms/',48,184,6.8,true,PDF_COLOR.blue);
       s+=pdfText('CUSTOMER SIGNATURE',36,154,7,true,PDF_COLOR.muted);s+=pdfStroke(36,69,338,72,'0.70 0.81 0.86',.8);const signatureTop=132,signatureBottom=78;s+=`${PDF_COLOR.ink} RG 1.4 w\n`;for(const stroke of state.signatureStrokes||[]){if(stroke.length<2)continue;stroke.forEach((point,index)=>{const x=42+point.x*326,py=signatureBottom+(1-point.y)*(signatureTop-signatureBottom);s+=`${x.toFixed(2)} ${py.toFixed(2)} ${index?'l':'m'}\n`});s+='S\n'}s+=pdfText('DATE SIGNED',400,133,6.5,true,PDF_COLOR.muted);s+=pdfText(formatLongDate(dates.signed),400,113,10,true);s+=pdfText('NEXT MONTHLY BILLING',400,91,6.5,true,PDF_COLOR.muted);s+=pdfText(formatLongDate(dates.next),400,75,8.5,true,PDF_COLOR.blue);s+=pdfLine(36,47,576,47,PDF_COLOR.line,.7);s+=pdfText('ReinmanPro Inc.  |  951-644-9593  |  reinmanpro.com',36,29,7.5,false,PDF_COLOR.muted);return s;
     }
+    function serviceTermsPdfStreams(){
+      const blocks=selectedServiceTerms().map(({terms})=>{const itemLines=terms.items.map(item=>wrapPdf('- '+item,105)),height=46+itemLines.reduce((total,lines)=>total+lines.length*9+6,0);return{terms,itemLines,height}});if(!blocks.length)return[];
+      const pages=[];let page=[],remaining=500;
+      for(const block of blocks){if(page.length&&block.height>remaining){pages.push(page);page=[];remaining=500}page.push(block);remaining-=block.height}
+      if(page.length)pages.push(page);
+      return pages.map((pageBlocks,pageIndex)=>{let s='',y=648;
+        s+=pdfFill(0,700,612,92,PDF_COLOR.navy);s+=pdfFill(0,696,612,4,PDF_COLOR.teal);s+=pdfText('REINMANPRO INC.',36,754,20,true,PDF_COLOR.white);s+=pdfText('PREVENTIVE HOME MAINTENANCE',36,736,8,true,'0.65 0.90 0.98');s+=pdfText(`SELECTED SERVICE TERMS  ${pageIndex+1} OF ${pages.length}`,392,750,8,true,PDF_COLOR.white);
+        s+=pdfText('SELECTED SERVICE TERMS',36,670,16,true);s+=pdfLine(36,660,576,660,'0.72 0.85 0.91',.8);
+        for(const block of pageBlocks){
+          s+=pdfFill(36,y-25,540,25,'0.92 0.97 0.99');s+=pdfStroke(36,y-25,540,25,'0.72 0.85 0.91',.7);s+=pdfText(block.terms.title.toUpperCase(),48,y-16,9,true,PDF_COLOR.blue);let cursor=y-39;
+          for(const lines of block.itemLines){for(const line of lines){s+=pdfText(line,48,cursor,7.2,false,PDF_COLOR.ink);cursor-=9}cursor-=6}
+          y-=block.height;
+        }
+        const supplement='These service-specific terms supplement the accepted Housecall Pro estimate and the Full Service Plan Terms & Conditions.';s+=pdfFill(36,92,540,42,'0.96 0.98 0.99');const note=pdfWrapped(supplement,48,116,108,7,9,true,PDF_COLOR.muted);s+=note.stream;s+=pdfText('FULL TERMS & CONDITIONS: reinmanpro.com/home-maintenance-plan/terms/',36,55,7,true,PDF_COLOR.blue);s+=pdfLine(36,46,576,46,PDF_COLOR.line,.7);s+=pdfText('ReinmanPro Inc.  |  951-644-9593  |  reinmanpro.com',36,29,7.5,false,PDF_COLOR.muted);return s;
+      });
+    }
     function buildSignedPlanPdf(calc){
-      const encoder=new TextEncoder(),pageOne=planPdfStream(calc),pageTwo=consentPdfStream(calc),objects=[
+      const encoder=new TextEncoder(),streams=[planPdfStream(calc),consentPdfStream(calc),...serviceTermsPdfStreams()],pageCount=streams.length,pageNumbers=streams.map((_,index)=>3+index),fontRegular=3+pageCount,fontBold=4+pageCount,contentStart=5+pageCount,annotationStart=5+pageCount*2,objects=[
         '<< /Type /Catalog /Pages 2 0 R >>',
-        '<< /Type /Pages /Kids [3 0 R 4 0 R] /Count 2 >>',
-        '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> /Contents 7 0 R /Annots [9 0 R] >>',
-        '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> /Contents 8 0 R /Annots [10 0 R] >>',
-        '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
-        '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>',
-        `<< /Length ${encoder.encode(pageOne).length} >>\nstream\n${pageOne}endstream`,
-        `<< /Length ${encoder.encode(pageTwo).length} >>\nstream\n${pageTwo}endstream`,
-        `<< /Type /Annot /Subtype /Link /Rect [34 49 366 64] /Border [0 0 0] /A << /S /URI /URI (${pdfSafe(TERMS_URL)}) >> >>`,
-        `<< /Type /Annot /Subtype /Link /Rect [46 176 372 192] /Border [0 0 0] /A << /S /URI /URI (${pdfSafe(TERMS_URL)}) >> >>`
+        `<< /Type /Pages /Kids [${pageNumbers.map(number=>`${number} 0 R`).join(' ')}] /Count ${pageCount} >>`
       ];
+      streams.forEach((_,index)=>objects.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 ${fontRegular} 0 R /F2 ${fontBold} 0 R >> >> /Contents ${contentStart+index} 0 R /Annots [${annotationStart+index} 0 R] >>`));
+      objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>');
+      streams.forEach(stream=>objects.push(`<< /Length ${encoder.encode(stream).length} >>\nstream\n${stream}\nendstream`));
+      streams.forEach((_,index)=>{const rect=index===1?'46 176 372 192':'34 49 366 64';objects.push(`<< /Type /Annot /Subtype /Link /Rect [${rect}] /Border [0 0 0] /A << /S /URI /URI (${pdfSafe(TERMS_URL)}) >> >>`)});
       let pdf='%PDF-1.4\n',offsets=[0];objects.forEach((object,index)=>{offsets.push(encoder.encode(pdf).length);pdf+=`${index+1} 0 obj\n${object}\nendobj\n`});const xref=encoder.encode(pdf).length;pdf+=`xref\n0 ${objects.length+1}\n0000000000 65535 f \n`;for(let i=1;i<=objects.length;i++)pdf+=`${String(offsets[i]).padStart(10,'0')} 00000 n \n`;pdf+=`trailer\n<< /Size ${objects.length+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;return new Blob([encoder.encode(pdf)],{type:'application/pdf'});
     }
     function safeFileName(value){return String(value||'client').trim().replace(/[^a-z0-9]+/gi,'-').replace(/^-+|-+$/g,'').slice(0,60)||'client'}
