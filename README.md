@@ -1,6 +1,10 @@
 # ReinmanPro Service Plan — GitHub Pages
 
-This package is ready to upload to a public GitHub repository. It includes the latest calculator based on `10_03_2026 6Pm (1).xlsx`, with updated Service Pricing Rules; selectable months within Q1–Q4; the standard 25% initial-payment plan; a readable side-by-side No Initial Payment option; clear enrollment-payment timing; selected months in the Final Plan; client-facing terms grouped directly beneath every selected service in the Plan Preview and Final Plan; matching selected-service terms in the saved PDF; updated Customer Consent authorization and key terms; clickable Full Terms links; and an improved, automatically paginated saved-PDF layout. It also includes the water animations, Home Screen icons, and offline app files. There is no employee login.
+This package is ready to upload to a public GitHub repository. It includes the latest calculator based on `10_03_2026 6Pm (1).xlsx`, with updated Service Pricing Rules; selectable months within Q1–Q4; the standard 25% initial-payment plan; a readable side-by-side No Initial Payment option; clear enrollment-payment timing; selected months in the Final Plan; and client-facing terms grouped directly beneath every selected service in the Plan Preview, Final Plan, and saved PDF. The saved PDF automatically continues the combined Services & Maintenance Schedule across pages without separating a service from its own terms. It also includes updated Customer Consent authorization and key terms, clickable Full Terms links, water animations, Home Screen icons, and offline app files. There is no employee login.
+
+The Preview, Final Plan, and PDF show a highlighted **TOTAL DUE UPON ENROLLMENT**, calculated as the initial payment plus the first monthly payment (or just the first monthly payment for No Initial Payment). Schedule columns display selected months only, without YES labels or checkmarks. Service terms start directly underneath their matching service rows on the first plan page and continue with the schedule when more space is needed; there is no separate Selected Service Terms appendix.
+
+The PDF uses the same pale-blue service row for every included service, consistent spacing, and up to three complete service-and-terms groups per plan page, including the first page. The customer consent is saved after the plan pages.
 
 ## Publish for the first time
 
@@ -27,7 +31,7 @@ If iOS clears website data, the app is removed/reinstalled, or an initial downlo
 
 ## Save a client PDF
 
-Create the plan, open the **Final Plan**, then tap **Save as PDF**. The app opens the system print sheet. On iPhone/iPad, expand the print preview with a two-finger pinch-out if needed, then use **Share → Save to Files**. The exact controls can vary by iOS version. Review the saved PDF once on your devices; its print layout excludes the calculator controls and internal cost breakdown.
+Create the plan, open the **Final Plan**, enter the Housecall Pro estimate number, and complete the customer authorization and signature. Tap **Save as PDF** to download the signed plan. Depending on the device/browser, choose the download location or use **Share → Save to Files**. Send the saved PDF to the client manually. Review the saved PDF once on your devices; it includes the selected services with their terms, highlighted enrollment total, and completed customer consent, and excludes calculator controls and internal cost breakdown.
 
 ## Update the app later
 
